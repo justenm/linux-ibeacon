@@ -74,6 +74,8 @@ def process_command(c):
 def check_for_sudo():
   if 'SUDO_UID' in os.environ.keys():
     return 1
+  elif os.environ.get('USER') == 'root':
+    return 1
   else:
     print ("Error: this script requires superuser privileges.  Please re-run with `sudo.'")
     return 0
