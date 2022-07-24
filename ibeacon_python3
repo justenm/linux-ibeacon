@@ -82,9 +82,9 @@ def check_for_sudo():
 
 # check to see if the hci device is valid
 # kind of a cheaty way of doing this, we just grep the output of
-# `hcitool list' to make sure the passed-in device string is present
+# `hcitool dev' to make sure the passed-in device string is present
 def is_valid_device(device):
-  return not os.system("hciconfig list 2>/dev/null | grep -q ^%s:" % device)
+  return not os.system("hcitool dev 2>/dev/null | grep -q -e %s" % device)
 
 ###############################################################################
 
@@ -220,7 +220,7 @@ def main(argv=None):
     # set up the beacon
     # pipe stdout to /dev/null to get rid of the ugly "here's what I did"
     # message from hcitool
-    process_command("hcitool -i hci0 cmd 0x08 0x0008 1E 02 01 1A 1A FF 4C 00 02 15 %s %s %s %s 00 >/dev/null" % (split_uuid, split_major_hex, split_minor_hex, power_hex))
+    process_command("hcitool -i %s cmd 0x08 0x0008 1E 02 01 1A 1A FF 4C 00 02 15 %s %s %s %s 00 >/dev/null" % (device, split_uuid, split_major_hex, split_minor_hex, power_hex))
  
   except Usage as err:
     print >>sys.stderr, err.msg
